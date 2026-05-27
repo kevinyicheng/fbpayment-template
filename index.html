@@ -273,12 +273,12 @@
   <div class="group">
     <div class="group-title">抬頭</div>
     <label>通訊處名稱／代號</label>
-    <select id="orgSelect" onchange="toggleOrgOther();render()">
+    <select id="orgSelect" onchange="toggleOrgOther();saveOrg();render()">
       <option value="中贊通訊處 TC811">中贊通訊處 TC811</option>
       <option value="中銘通訊處 TC813" selected>中銘通訊處 TC813</option>
       <option value="__other__">其他</option>
     </select>
-    <input type="text" id="orgOther" placeholder="請輸入通訊處名稱／代號" oninput="render()" style="display:none;margin-top:8px;">
+    <input type="text" id="orgOther" placeholder="請輸入通訊處名稱／代號" oninput="saveOrg();render()" style="display:none;margin-top:8px;">
     <label>申請日期</label>
     <input type="date" id="applyDate" oninput="render()">
   </div>
@@ -369,6 +369,19 @@
     const isOther = document.getElementById('orgSelect').value === '__other__';
     document.getElementById('orgOther').style.display = isOther ? 'block' : 'none';
     if(isOther){ document.getElementById('orgOther').focus(); }
+  }
+  function saveOrg(){
+    localStorage.setItem('fbp_org_select', document.getElementById('orgSelect').value);
+    localStorage.setItem('fbp_org_other', document.getElementById('orgOther').value);
+  }
+  function loadOrg(){
+    const sel = localStorage.getItem('fbp_org_select');
+    const other = localStorage.getItem('fbp_org_other');
+    if(sel){
+      document.getElementById('orgSelect').value = sel;
+      if(other) document.getElementById('orgOther').value = other;
+      toggleOrgOther();
+    }
   }
 
   function fmtDate(v, withWeekday, noRepublic){
@@ -550,6 +563,7 @@
     const today = t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
     document.getElementById('applyDate').value = today;
     document.getElementById('actDate').value = today;
+    loadOrg();
     render();
   })();
 </script>
