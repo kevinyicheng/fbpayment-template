@@ -452,15 +452,6 @@
     const eRoc = e[0]-1911, eM = e[1], eD = e[2];
     const eWd = weekday(end);
 
-    // 同年同月 → 精簡
-    if(sRoc === eRoc && sM === eM){
-      return '<span class="d">' + sRoc + ' 年 ' + sM + ' 月 ' + sD + ' 日（星期' + sWd + '）</span> <span class="d">～ ' + eD + ' 日（星期' + eWd + '）</span>';
-    }
-    // 同年不同月
-    if(sRoc === eRoc){
-      return '<span class="d">' + sRoc + ' 年 ' + sM + ' 月 ' + sD + ' 日（星期' + sWd + '）</span> <span class="d">～ ' + eM + ' 月 ' + eD + ' 日（星期' + eWd + '）</span>';
-    }
-    // 跨年 → 完整
     return '<span class="d">' + sRoc + ' 年 ' + sM + ' 月 ' + sD + ' 日（星期' + sWd + '）</span> <span class="d">～ ' + eRoc + ' 年 ' + eM + ' 月 ' + eD + ' 日（星期' + eWd + '）</span>';
   }
 
@@ -507,7 +498,6 @@
     const actDate = fmtDateRange(startVal, endVal);
     const place = getPlaceValue();
     const host = g('host');
-    const applicant = g('applicant');
     const manager = g('manager');
     const contentLines = g('content').split('\n').map(function(s){return s.trim();}).filter(Boolean);
 
