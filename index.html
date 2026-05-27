@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>活動申請公文套版</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+
+  :root{
+    --ink:#1a1a1a;
+    --paper:#fffefb;
+    --line:#c9b896;
+    --seal:#b22222;
+    --panel-bg:#2b2a28;
+    --panel-fg:#e8e4dc;
+    --accent:#8a6d3b;
+    --field-bg:#1f1e1c;
+    --field-border:#46443f;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"Noto Sans TC",sans-serif;
+    background:#3a3835;
+    color:var(--ink);
+    display:flex;
+    min-height:100vh;
+  }
+
+  .panel{
+    width:380px;
+    min-width:380px;
+    background:var(--panel-bg);
+    color:var(--panel-fg);
+    height:100vh;
+    overflow-y:auto;
+    padding:28px 24px 60px;
+    position:sticky;
+    top:0;
+  }
+  .panel h1{
+    font-family:"Noto Serif TC",serif;
+    font-size:20px;
+    font-weight:900;
+    margin:0 0 4px;
+    letter-spacing:2px;
+  }
+  .panel .sub{
+    font-size:12px;
+    color:#9a948a;
+    margin-bottom:24px;
+    letter-spacing:1px;
+  }
+  .group{margin-bottom:22px;}
+  .group-title{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:2px;
+    color:var(--accent);
+    text-transform:uppercase;
+    margin-bottom:10px;
+    padding-bottom:6px;
+    border-bottom:1px solid var(--field-border);
+  }
+  label{
+    display:block;
+    font-size:12px;
+    color:#b8b2a8;
+    margin:10px 0 4px;
+  }
+  input[type=text], input[type=date], textarea, select{
+    width:100%;
+    background:var(--field-bg);
+    border:1px solid var(--field-border);
+    border-radius:6px;
+    color:var(--panel-fg);
+    padding:8px 10px;
+    font-size:13px;
+    font-family:"Noto Sans TC",sans-serif;
+    transition:border-color .15s;
+  }
+  input:focus, textarea:focus, select:focus{
+    outline:none;
+    border-color:var(--accent);
+  }
+  textarea{resize:vertical;line-height:1.7;}
+
+  .radio-set{display:flex;flex-direction:column;gap:6px;}
+  .radio-set label.opt{
+    display:flex;align-items:center;gap:8px;
+    margin:0;font-size:13px;color:var(--panel-fg);
+    cursor:pointer;padding:5px 8px;border-radius:6px;
+    transition:background .12s;
+  }
+  .radio-set label.opt:hover{background:#33322c;}
+  .radio-set input[type=radio]{width:auto;margin:0;accent-color:var(--accent);}
+  .radio-other{display:flex;align-items:center;gap:8px;}
+  .radio-other input[type=text]{flex:1;}
+
+  .btn{
+    width:100%;
+    padding:10px;
+    border:none;
+    border-radius:6px;
+    font-family:"Noto Sans TC",sans-serif;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:1px;
+    cursor:pointer;
+    transition:all .15s;
+  }
+  .btn-print{
+    background:var(--accent);color:#fff;
+    margin-top:8px;font-size:14px;padding:12px;
+  }
+  .btn-print:hover{background:#a07f44;}
+  .actions{
+    position:sticky;bottom:0;
+    background:linear-gradient(transparent,var(--panel-bg) 30%);
+    padding-top:20px;margin-top:10px;
+  }
+  .hint{font-size:11px;color:#7d776d;margin-top:8px;line-height:1.6;}
+  .note-future{
+    font-size:11px;color:#7d8a6d;background:#262a22;
+    border:1px solid #3a4530;border-radius:6px;
+    padding:8px 10px;margin-top:8px;line-height:1.6;
+  }
+
+  .stage{
+    flex:1;
+    padding:40px;
+    overflow-y:auto;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+  }
+
+  .doc{
+    width:210mm;
+    height:297mm;
+    background:var(--paper);
+    padding:22mm 22mm 22mm;
+    box-shadow:0 8px 40px rgba(0,0,0,.5);
+    color:var(--ink);
+    font-family:"Noto Serif TC",serif;
+    position:relative;
+    overflow:hidden;
+  }
+  /* 抬頭區（置中，從上而下） */
+  .doc .head{text-align:center;margin-bottom:14px;}
+  .doc .head .org{
+    font-size:15pt;
+    font-weight:600;
+    letter-spacing:4px;
+    margin-bottom:8px;
+  }
+  .doc .head .title{
+    font-size:22pt;
+    font-weight:900;
+    letter-spacing:6px;
+    margin-bottom:10px;
+  }
+  .doc .head .apply-date{
+    font-size:11pt;
+    letter-spacing:1px;
+    text-align:right;
+    margin-top:6px;
+  }
+  .doc hr.rule{
+    border:none;
+    border-top:1.5px solid var(--ink);
+    margin:6px 0 16px;
+  }
+
+  /* 主表格：左右並排佈局 */
+  table.form{
+    width:100%;
+    border-collapse:collapse;
+    font-size:12pt;
+    margin-bottom:0;
+    table-layout:fixed;
+  }
+  table.form th, table.form td{
+    border:1px solid var(--ink);
+    padding:10px 12px;
+    vertical-align:middle;
+    line-height:1.8;
+  }
+  table.form th{
+    background:#f0ebe0;
+    font-weight:700;
+    text-align:center;
+    white-space:nowrap;
+  }
+  table.form td{text-align:left;}
+  table.form td.date-cell{line-height:1.9;}
+  table.form td.date-cell .d{white-space:nowrap;}
+  table.form td.content-cell{
+    text-align:justify;
+    vertical-align:top;
+    height:248px;
+    padding:10px 12px;
+  }
+  table.form td.content-cell .content-inner{
+    height:228px;
+    overflow:hidden;
+    line-height:2;
+    font-size:var(--content-fs, 12pt);
+  }
+  table.form td.content-cell .content-inner ol{
+    font-size:inherit;
+  }
+
+  .checks{display:flex;flex-wrap:wrap;gap:6px 22px;}
+  .checks .ck{white-space:nowrap;}
+  .checks .box{
+    display:inline-block;width:1em;text-align:center;
+    font-family:"Noto Sans TC",sans-serif;
+    margin-right:4px;font-weight:700;
+  }
+  .checks .checked .box{color:var(--seal);}
+  .checks .checked{font-weight:700;}
+
+  /* 簽名區（非表格） */
+  .doc .sign{
+    display:flex;
+    margin-top:84px;
+    justify-content:flex-end;
+    font-size:12pt;
+  }
+  .doc .sign .sign-item{
+    display:flex;
+    align-items:flex-end;
+  }
+  .doc .sign .sign-label{
+    font-weight:700;
+    white-space:nowrap;
+  }
+  .doc .sign .sign-line{
+    display:inline-block;
+    min-width:200px;
+    border-bottom:1px solid var(--ink);
+    text-align:center;
+    padding:0 8px 4px;
+    margin-left:4px;
+  }
+
+  @media print{
+    @page{size:A4;margin:0;}
+    body{background:#fff;display:block;}
+    .panel{display:none !important;}
+    .stage{padding:0;display:block;height:auto;overflow:visible;}
+    .doc{
+      box-shadow:none;
+      width:210mm;
+      height:297mm;
+      margin:0;
+      overflow:hidden;
+      page-break-after:avoid;
+    }
+  }
+</style>
+</head>
+<body>
+
+<aside class="panel">
+  <h1>活動申請公文</h1>
+  <div class="sub">套版列印工具</div>
+
+  <div class="group">
+    <div class="group-title">抬頭</div>
+    <label>通訊處名稱／代號</label>
+    <select id="orgSelect" onchange="toggleOrgOther();render()">
+      <option value="中贊通訊處 TC811">中贊通訊處 TC811</option>
+      <option value="中銘通訊處 TC813" selected>中銘通訊處 TC813</option>
+      <option value="__other__">其他</option>
+    </select>
+    <input type="text" id="orgOther" placeholder="請輸入通訊處名稱／代號" oninput="render()" style="display:none;margin-top:8px;">
+    <label>申請日期</label>
+    <input type="date" id="applyDate" oninput="render()">
+  </div>
+
+  <div class="group">
+    <div class="group-title">活動性質（單選．帶入標題）</div>
+    <div class="radio-set" id="natureSet">
+      <label class="opt"><input type="radio" name="nature" value="業績獎勵" onchange="render()">業績獎勵</label>
+      <label class="opt"><input type="radio" name="nature" value="活動會議" onchange="render()">活動會議</label>
+      <label class="opt"><input type="radio" name="nature" value="訓練" onchange="render()">訓練</label>
+      <label class="opt"><input type="radio" name="nature" value="康樂活動" checked onchange="render()">康樂活動</label>
+      <div class="radio-other">
+        <label class="opt" style="margin:0;"><input type="radio" name="nature" value="__other__" onchange="render()">其他</label>
+        <input type="text" id="natureOther" placeholder="請輸入" oninput="document.querySelector('input[name=nature][value=__other__]').checked=true;render()">
+      </div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-title">活動資訊</div>
+    <label>活動名稱</label>
+    <input type="text" id="actName" value="" placeholder="如：第二季團隊聚餐暨表揚大會" oninput="render()">
+    <label>活動日期（起）</label>
+    <input type="date" id="actDate" oninput="render()">
+    <label>活動結束日期（選填，填了即顯示為區間）</label>
+    <input type="date" id="actDateEnd" oninput="render()">
+    <label>活動地點</label>
+    <input type="text" id="place" value="" placeholder="如：台北君悅酒店 3 樓宴會廳" oninput="render()">
+    <label>主辦人</label>
+    <input type="text" id="host" value="" placeholder="如：Kevin" oninput="render()">
+  </div>
+
+  <div class="group">
+    <div class="group-title">活動對象（單選）</div>
+    <div class="radio-set" id="targetSet">
+      <label class="opt"><input type="radio" name="target" value="單位同仁（踴躍參與）" checked onchange="render()">單位同仁（踴躍參與）</label>
+      <label class="opt"><input type="radio" name="target" value="單位同仁及來賓（踴躍參與）" onchange="render()">單位同仁及來賓（踴躍參與）</label>
+      <div class="radio-other">
+        <label class="opt" style="margin:0;"><input type="radio" name="target" value="__other__" onchange="render()">其他</label>
+        <input type="text" id="targetOther" placeholder="請輸入" oninput="document.querySelector('input[name=target][value=__other__]').checked=true;render()">
+      </div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-title">內容</div>
+    <textarea id="content" rows="6" oninput="render()" placeholder="活動內容說明，每行一項"></textarea>
+  </div>
+
+  <div class="group">
+    <div class="group-title">費用（本版不顯示．資料保留供報表使用）</div>
+    <label>本次活動費用</label>
+    <input type="text" id="cost" value="" placeholder="如：NT$ 50,000" oninput="render()">
+    <div class="note-future">此欄位的資料會保留，供後續另一份報表使用，目前公文版面不顯示。</div>
+  </div>
+
+  <div class="group">
+    <div class="group-title">簽核欄位</div>
+    <label>申請人</label>
+    <input type="text" id="applicant" value="" placeholder="申請人簽名" oninput="render()">
+    <label>單位主管</label>
+    <input type="text" id="manager" value="" placeholder="單位主管簽名" oninput="render()">
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-print" onclick="window.print()">🖨 列印 / 另存【公文】</button>
+    <div class="hint">列印時表單會自動隱藏，只輸出 A4 公文。<br>在列印對話框選「另存為 PDF」即可存檔。</div>
+  </div>
+</aside>
+
+<main class="stage">
+  <div class="doc" id="doc"></div>
+</main>
+
+<script>
+  function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+
+  // 通訊處：下拉值，選「其他」則取輸入框
+  function getOrgValue(){
+    const sel = document.getElementById('orgSelect').value;
+    if(sel === '__other__'){
+      return document.getElementById('orgOther').value || '';
+    }
+    return sel;
+  }
+  // 切換「其他」輸入框顯示
+  function toggleOrgOther(){
+    const isOther = document.getElementById('orgSelect').value === '__other__';
+    document.getElementById('orgOther').style.display = isOther ? 'block' : 'none';
+    if(isOther){ document.getElementById('orgOther').focus(); }
+  }
+
+  function fmtDate(v, withWeekday, noRepublic){
+    if(!v) return '　年　月　日';
+    const parts = v.split('-').map(Number);
+    const y = parts[0], m = parts[1], d = parts[2];
+    const roc = y - 1911;
+    let base = (noRepublic ? '' : '中華民國 ') + roc + ' 年 ' + m + ' 月 ' + d + ' 日';
+    if(withWeekday){
+      const wd = ['日','一','二','三','四','五','六'][new Date(v).getDay()];
+      base += '（星期' + wd + '）';
+    }
+    return base;
+  }
+
+  function weekday(v){
+    return ['日','一','二','三','四','五','六'][new Date(v).getDay()];
+  }
+
+  // 活動日期：單日或區間（每段日期用 span.d 包住，單日內不斷行）
+  function fmtDateRange(start, end){
+    if(!start) return '　年　月　日';
+    const s = start.split('-').map(Number);
+    const sRoc = s[0]-1911, sM = s[1], sD = s[2];
+    const sWd = weekday(start);
+
+    // 無結束日 → 單日
+    if(!end || end === start){
+      return '<span class="d">' + sRoc + ' 年 ' + sM + ' 月 ' + sD + ' 日（星期' + sWd + '）</span>';
+    }
+
+    const e = end.split('-').map(Number);
+    const eRoc = e[0]-1911, eM = e[1], eD = e[2];
+    const eWd = weekday(end);
+
+    // 同年同月 → 精簡
+    if(sRoc === eRoc && sM === eM){
+      return '<span class="d">' + sRoc + ' 年 ' + sM + ' 月 ' + sD + ' 日（星期' + sWd + '）</span> <span class="d">～ ' + eD + ' 日（星期' + eWd + '）</span>';
+    }
+    // 同年不同月
+    if(sRoc === eRoc){
+      return '<span class="d">' + sRoc + ' 年 ' + sM + ' 月 ' + sD + ' 日（星期' + sWd + '）</span> <span class="d">～ ' + eM + ' 月 ' + eD + ' 日（星期' + eWd + '）</span>';
+    }
+    // 跨年 → 完整
+    return '<span class="d">' + sRoc + ' 年 ' + sM + ' 月 ' + sD + ' 日（星期' + sWd + '）</span> <span class="d">～ ' + eRoc + ' 年 ' + eM + ' 月 ' + eD + ' 日（星期' + eWd + '）</span>';
+  }
+
+  function getNatureValue(){
+    const sel = document.querySelector('input[name=nature]:checked');
+    if(!sel) return '';
+    if(sel.value === '__other__') return document.getElementById('natureOther').value || '其他';
+    return sel.value;
+  }
+  function getTargetValue(){
+    const sel = document.querySelector('input[name=target]:checked');
+    if(!sel) return '';
+    if(sel.value === '__other__') return document.getElementById('targetOther').value || '其他';
+    return sel.value;
+  }
+
+  function targetChecks(){
+    const opts = ['單位同仁（踴躍參與）','單位同仁及來賓（踴躍參與）'];
+    const sel = document.querySelector('input[name=target]:checked');
+    const selVal = sel ? sel.value : '';
+    const otherTxt = document.getElementById('targetOther').value;
+    let html = '<div class="checks">';
+    opts.forEach(function(o){
+      const on = (selVal === o);
+      html += '<span class="ck ' + (on?'checked':'') + '"><span class="box">' + (on?'■':'□') + '</span>' + o + '</span>';
+    });
+    const otherOn = (selVal === '__other__');
+    const otherFill = (otherOn && otherTxt) ? esc(otherTxt) : '＿＿＿＿＿＿';
+    html += '<span class="ck ' + (otherOn?'checked':'') + '"><span class="box">' + (otherOn?'■':'□') + '</span>其他：' + otherFill + '</span>';
+    html += '</div>';
+    return html;
+  }
+
+  function render(){
+    const g = function(id){ return document.getElementById(id).value; };
+    const org = getOrgValue();
+    const nature = getNatureValue();
+    const applyDate = fmtDate(g('applyDate'), false, true);
+    const actName = g('actName');
+    const actDate = fmtDateRange(g('actDate'), g('actDateEnd'));
+    const place = g('place');
+    const host = g('host');
+    const applicant = g('applicant');
+    const manager = g('manager');
+    const contentLines = g('content').split('\n').map(function(s){return s.trim();}).filter(Boolean);
+
+    let contentHtml = '';
+    if(contentLines.length){
+      contentHtml = '<ol style="margin:0;padding-left:1.4em;line-height:2;">' +
+        contentLines.map(function(l){return '<li>' + esc(l) + '</li>';}).join('') + '</ol>';
+    } else {
+      contentHtml = '&nbsp;';
+    }
+
+    const title = '單位' + (esc(nature)||'　　') + '公文';
+
+    document.getElementById('doc').innerHTML =
+      '<div class="head">' +
+        '<div class="org">' + (esc(org)||'　') + '</div>' +
+        '<div class="title">' + title + '</div>' +
+        '<div class="apply-date">申請日期：' + applyDate + '</div>' +
+      '</div>' +
+      '<hr class="rule">' +
+      '<table class="form">' +
+        '<colgroup><col style="width:16%"><col style="width:42%"><col style="width:16%"><col style="width:26%"></colgroup>' +
+        '<tr class="equal-row" id="row-name">' +
+          '<th class="th-cell">活動名稱</th><td colspan="3">' + (esc(actName)||'&nbsp;') + '</td>' +
+        '</tr>' +
+        '<tr class="equal-row" id="row-target">' +
+          '<th class="th-cell">活動對象</th><td colspan="3">' + targetChecks() + '</td>' +
+        '</tr>' +
+        '<tr>' +
+          '<th class="th-cell">活動日期</th><td class="date-cell">' + actDate + '</td>' +
+          '<th class="th-cell-2">活動地點</th><td>' + (esc(place)||'&nbsp;') + '</td>' +
+        '</tr>' +
+        '<tr>' +
+          '<th class="th-cell">內容</th><td colspan="3" class="content-cell"><div class="content-inner">' + contentHtml + '</div></td>' +
+        '</tr>' +
+      '</table>' +
+      '<div class="sign">' +
+        '<div class="sign-item"><span class="sign-label">單位主管：</span><span class="sign-line">' + (esc(manager)||'') + '</span></div>' +
+      '</div>';
+
+    fitContent();
+    equalizeRows();
+  }
+
+  // 量測活動名稱列與活動對象列的實際高度，取較高者套到另一列，確保等高
+  function equalizeRows(){
+    requestAnimationFrame(function(){
+      const rowName = document.getElementById('row-name');
+      const rowTarget = document.getElementById('row-target');
+      if(!rowName || !rowTarget) return;
+
+      const cellsName = [].slice.call(rowName.children);
+      const cellsTarget = [].slice.call(rowTarget.children);
+      const allCells = cellsName.concat(cellsTarget);
+
+      // 先清除先前高度設定，讓兩列回到自然高度再量測
+      allCells.forEach(function(c){ c.style.height = ''; });
+
+      // 用 offsetHeight 量測每列（以該列最高的 cell 為準）
+      function rowHeight(cells){
+        return Math.max.apply(null, cells.map(function(c){ return c.offsetHeight; }));
+      }
+      const target = Math.max(rowHeight(cellsName), rowHeight(cellsTarget));
+
+      // 套用統一高度
+      allCells.forEach(function(c){ c.style.height = target + 'px'; });
+    });
+  }
+
+  // 內容過多時自動縮小內容欄字級，確保不超出固定區域（A4 單頁）
+  function fitContent(){
+    requestAnimationFrame(function(){
+      const inner = document.querySelector('.content-inner');
+      const doc = document.getElementById('doc');
+      if(!inner) return;
+
+      let fs = 12; // pt，預設最大字級
+      doc.style.setProperty('--content-fs', fs + 'pt');
+
+      const maxHeight = inner.clientHeight; // 固定可視區高度
+      let guard = 0;
+      while(inner.scrollHeight > maxHeight + 1 && fs > 7 && guard < 50){
+        fs -= 0.5;
+        doc.style.setProperty('--content-fs', fs + 'pt');
+        guard++;
+      }
+    });
+  }
+
+  (function init(){
+    const t = new Date();
+    const today = t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
+    document.getElementById('applyDate').value = today;
+    document.getElementById('actDate').value = today;
+    render();
+  })();
+</script>
+</body>
+</html>
