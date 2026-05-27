@@ -142,24 +142,106 @@
 
   .stage{
     flex:1;
-    padding:40px;
+    padding:0 40px 40px;
     overflow-y:auto;
     height:100vh;
     display:flex;
-    justify-content:center;
-    align-items:flex-start;
+    flex-direction:column;
+    align-items:center;
   }
+  /* 分頁列：鎖定頂端，實心背景 */
+  .tabs{
+    display:flex;
+    gap:4px;
+    background:#26251f;
+    padding:6px;
+    border-radius:10px;
+    position:sticky;
+    top:0;
+    z-index:50;
+    margin:16px 0 24px;
+    align-self:center;
+    box-shadow:0 4px 16px rgba(0,0,0,.5);
+  }
+  .tab{
+    border:none;
+    background:transparent;
+    color:#9a948a;
+    font-family:"Noto Sans TC",sans-serif;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:1px;
+    padding:10px 24px;
+    border-radius:7px;
+    cursor:pointer;
+    transition:all .15s;
+  }
+  .tab:hover{color:#cfc8bc;}
+  .tab.active{
+    background:var(--accent);
+    color:#fff;
+  }
+  .doc-wrap{display:flex;justify-content:center;width:100%;}
+  /* 表單分隔標題 */
+  .sep-title{
+    font-size:12px;
+    font-weight:700;
+    color:#b89a5a;
+    letter-spacing:1px;
+    margin:6px 0 18px;
+    padding:8px 10px;
+    background:#2f2a1f;
+    border-left:3px solid var(--accent);
+    border-radius:4px;
+  }
+  /* 費用增列 */
+  .btn-add{
+    width:100%;
+    padding:9px;
+    border:1px dashed var(--field-border);
+    background:#26251f;
+    color:#b8b2a8;
+    border-radius:6px;
+    font-family:"Noto Sans TC",sans-serif;
+    font-size:13px;
+    cursor:pointer;
+    transition:all .15s;
+  }
+  .btn-add:hover{border-color:var(--accent);color:var(--accent);}
+  .cost-row{
+    display:flex;
+    gap:6px;
+    margin-bottom:6px;
+    align-items:center;
+  }
+  .cost-row input{margin:0;}
+  .cost-row .ci-item{flex:0 0 38%;}
+  .cost-row .ci-desc{flex:1;}
+  .cost-row .ci-del{
+    flex:0 0 auto;
+    border:none;background:transparent;
+    color:#a55;cursor:pointer;font-size:18px;
+    padding:0 4px;line-height:1;
+  }
+  .cost-row .ci-del:hover{color:#e44;}
 
   .doc{
     width:210mm;
     height:297mm;
     background:var(--paper);
-    padding:22mm 22mm 22mm;
+    padding:14mm 16mm 14mm;
     box-shadow:0 8px 40px rgba(0,0,0,.5);
     color:var(--ink);
     font-family:"Noto Serif TC",serif;
     position:relative;
     overflow:hidden;
+  }
+  /* 展業說明書：高度自動、邊距再縮 */
+  .doc.doc-statement{
+    height:auto;
+    min-height:297mm;
+    overflow:visible;
+    padding:10mm 14mm 10mm;
   }
   /* 抬頭區（置中，從上而下） */
   .doc .head{text-align:center;margin-bottom:14px;}
@@ -270,11 +352,119 @@
     }
   }
 
+  /* ===== 展業活動說明書樣式 ===== */
+  .doc-statement{font-size:10.5pt; font-family:"Noto Serif TC",serif;}
+  .s-title{
+    text-align:center;
+    font-size:17pt;
+    font-weight:900;
+    letter-spacing:4px;
+    margin-bottom:12px;
+  }
+  table.s-form{
+    width:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
+    font-size:10.5pt;
+  }
+  table.s-form th, table.s-form td{
+    border:1px solid #333;
+    padding:7.7px 9px;
+    vertical-align:middle;
+    line-height:1.7;
+    word-wrap:break-word;
+  }
+  table.s-form th{
+    background:#ddd9ce;
+    font-weight:700;
+    text-align:center;
+    font-family:"Noto Serif TC",serif;
+  }
+  /* 長標題欄：不換行、字級略縮、padding 縮小，避免爆框 */
+  .s-th-long{
+    white-space:nowrap;
+    font-size:9.5pt;
+    padding-left:4px !important;
+    padding-right:4px !important;
+    letter-spacing:-0.3px;
+  }
+  table.s-form td{text-align:left; background:#fff;}
+  /* AML 標題垂直置中，兩行 */
+  .s-aml-th{vertical-align:middle; line-height:1.8;}
+  /* 勾選行樣式 */
+  .s-checks{white-space:normal;}
+  .s-checks .sck{display:inline-block; margin-right:10px; white-space:nowrap; line-height:2;}
+  .s-aml{font-size:10pt; line-height:1.85; vertical-align:top; padding-top:9px; padding-bottom:9px;}
+  .s-aml .sck-line{margin-bottom:2px;}
+  .s-aml .sck-sub{padding-left:1.4em; margin-bottom:2px;}
+  /* 活動目的說明留白 */
+  .s-purpose{min-height:62px; vertical-align:top;}
+  /* 費用表頭 */
+  .s-cost-label{font-weight:700; text-align:center; background:#ddd9ce;}
+  .s-cost-head-desc{font-weight:700; text-align:center; background:#ddd9ce;}
+  /* 費用合併大格 */
+  .s-cost-label-cell{
+    background:#ddd9ce !important;
+    font-weight:700;
+    text-align:center;
+    vertical-align:middle;
+  }
+  .s-cost-block{
+    background:#f0ede4 !important;
+    height:154px;
+    vertical-align:top;
+    padding:10px 12px;
+  }
+  .cost-desc-block{line-height:1.8; margin-bottom:6px;}
+  .cost-divider{border-top:1px dashed #bbb; margin:6px 0;}
+  .cost-inner-row{margin-bottom:4px; line-height:1.8;}
+  .cost-inner-item{font-weight:700;}
+  /* 本次活動費用列 */
+  .s-total-row td{height:37px; background:#fff;}
+  .s-total-mid{text-align:center; font-weight:700;}
+  .s-total-val{background:#fff;}
+  /* 備註 */
+  .s-remark{min-height:48px; vertical-align:top;}
+  /* 版次 */
+  .s-version{text-align:right; font-size:9pt; margin:6px 2px 0; color:#444;}
+  /* 三段註記 */
+  .s-notes{
+    font-size:9.5pt;
+    line-height:1.7;
+    margin:10px 2px 0;
+    color:#222;
+  }
+  .s-notes div{margin-bottom:2px; text-align:justify;}
+  /* 簽核區（對照 PDF 留空間讓人手寫） */
+  .s-sign{margin-top:24px; font-size:11pt; font-family:"Noto Serif TC",serif;}
+  .s-sign-row{
+    display:flex;
+    gap:30px;
+    margin-bottom:32px;
+  }
+  .s-sign-item{
+    flex:1;
+    display:inline-flex;
+    align-items:flex-end;
+  }
+  .s-sign-blank{
+    flex:1;
+    border-bottom:1px solid #888;
+    margin-left:6px;
+    min-width:80px;
+    display:inline-block;
+  }
+  /* date-cell in statement：允許換行、字級略縮，避免（星期X）超出 */
+  .doc-statement td.date-cell{font-size:10pt; line-height:1.7;}
+  .doc-statement td.date-cell .d{white-space:normal;}
+
   @media print{
     @page{size:A4;margin:0;}
     body{background:#fff;display:block;}
     .panel{display:none !important;}
+    .tabs{display:none !important;}
     .stage{padding:0;display:block;height:auto;overflow:visible;}
+    .doc-wrap[style*="none"]{display:none !important;}
     .doc{
       box-shadow:none;
       width:210mm;
@@ -282,8 +472,13 @@
       margin:0;
       overflow:hidden;
       page-break-after:avoid;
-      transform:none !important;
+      transform-origin:top left;
       margin-bottom:0 !important;
+    }
+    .doc.doc-statement{
+      height:297mm;
+      overflow:hidden;
+      page-break-after:avoid;
     }
   }
 </style>
@@ -303,10 +498,12 @@
       <option value="__other__">其他</option>
     </select>
     <input type="text" id="orgOther" placeholder="請輸入通訊處名稱／代號" oninput="saveOrg();render()" style="display:none;margin-top:8px;">
+    <label>申請日期</label>
+    <input type="date" id="applyDate" oninput="render()">
   </div>
 
   <div class="group">
-    <div class="group-title">活動性質（單選．帶入標題）</div>
+    <div class="group-title">活動性質（單選）</div>
     <div class="radio-set" id="natureSet">
       <label class="opt"><input type="radio" name="nature" value="業績獎勵" onchange="render()">業績獎勵</label>
       <label class="opt"><input type="radio" name="nature" value="活動" onchange="render()">活動</label>
@@ -357,6 +554,11 @@
   </div>
 
   <div class="group">
+    <div class="group-title">活動目的說明 <span style="font-size:10px;color:#b89a5a;">（展業活動說明書）</span></div>
+    <textarea id="purpose" rows="4" oninput="render()" placeholder="填入展業活動說明書的活動目的說明"></textarea>
+  </div>
+
+  <div class="group">
     <div class="group-title">內容</div>
     <textarea id="content" rows="6" oninput="render()"></textarea>
   </div>
@@ -366,16 +568,54 @@
     <input type="text" id="host" value="" placeholder="如：Kevin" oninput="render()">
   </div>
 
+  <div class="sep-title">▼ 以下為「展業活動說明書」專屬欄位</div>
+
   <div class="group">
-    <div class="group-title">單位主管</div>
-    <input type="text" id="manager" value="" placeholder="單位主管簽名" oninput="render()">
+    <div class="group-title">提出「活動安全評估表」</div>
+    <div class="radio-set">
+      <label class="opt"><input type="radio" name="safety" value="否" checked onchange="render()">否</label>
+      <label class="opt"><input type="radio" name="safety" value="是" onchange="render()">是，提出日期：</label>
+    </div>
+    <input type="date" id="safetyDate" oninput="document.querySelector('input[name=safety][value=是]').checked=true;render()" style="margin-top:6px;">
   </div>
 
   <div class="group">
-    <div class="group-title">費用（本版不顯示．資料保留供報表使用）</div>
-    <label>本次活動費用</label>
-    <input type="text" id="cost" value="" placeholder="如：NT$ 50,000" oninput="render()">
-    <div class="note-future">此欄位的資料會保留，供後續另一份報表使用，目前公文版面不顯示。</div>
+    <div class="group-title">利關人及 AML 查詢</div>
+    <div class="radio-set">
+      <label class="opt"><input type="radio" name="aml" value="none" checked onchange="toggleAml();render()">本次無須查詢（例：競賽激勵獎金）</label>
+      <label class="opt"><input type="radio" name="aml" value="stores" onchange="toggleAml();render()">本次有交易店家，分項說明</label>
+    </div>
+    <div id="amlDetail" style="display:none;margin-top:8px;padding-left:4px;">
+      <label>交易店家共計（家）</label>
+      <input type="text" id="amlTotal" placeholder="總家數" oninput="render()">
+      <label>(1) 已有明確店家．提供審查表（家）</label>
+      <input type="text" id="amlA" placeholder="家數" oninput="render()">
+      <label>(2) 明確店家．1萬元以下標準化（家）</label>
+      <input type="text" id="amlB" placeholder="家數" oninput="render()">
+      <label>　　店家名稱</label>
+      <input type="text" id="amlBName" placeholder="店家名稱" oninput="render()">
+      <label>(3) 尚未確認店家．預計（家）</label>
+      <input type="text" id="amlC" placeholder="家數" oninput="render()">
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-title">計入活動參與率</div>
+    <div class="radio-set">
+      <label class="opt"><input type="radio" name="rate" value="否" checked onchange="render()">否</label>
+      <label class="opt"><input type="radio" name="rate" value="是（參加名單）" onchange="render()">是（參加名單）</label>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-title">費用明細（可增列）</div>
+    <div id="costList"></div>
+    <button type="button" class="btn-add" onclick="addCostRow()">＋ 新增費用項目</button>
+  </div>
+
+  <div class="group">
+    <div class="group-title">備註</div>
+    <textarea id="remark" rows="3" oninput="render()" placeholder="（選填）"></textarea>
   </div>
 
   <div class="actions">
@@ -385,7 +625,16 @@
 </aside>
 
 <main class="stage">
-  <div class="doc" id="doc"></div>
+  <div class="tabs">
+    <button class="tab active" id="tab-notice" onclick="switchTab('notice')">活動通知</button>
+    <button class="tab" id="tab-statement" onclick="switchTab('statement')">展業活動說明書</button>
+  </div>
+  <div class="doc-wrap" id="wrap-notice">
+    <div class="doc" id="doc"></div>
+  </div>
+  <div class="doc-wrap" id="wrap-statement" style="display:none;">
+    <div class="doc doc-statement" id="docS"></div>
+  </div>
 </main>
 
 <script>
@@ -419,15 +668,20 @@
     }
   }
 
+  // 單一日期格式：YYY.MM.DD(X)，申請日期等用
   function fmtDate(v, withWeekday, noRepublic){
-    if(!v) return '　年　月　日';
+    if(!v) return '　.　.　';
     const parts = v.split('-').map(Number);
     const y = parts[0], m = parts[1], d = parts[2];
     const roc = y - 1911;
-    let base = (noRepublic ? '' : '中華民國 ') + roc + ' 年 ' + m + ' 月 ' + d + ' 日';
+    const mm = String(m).padStart(2,'0');
+    const dd = String(d).padStart(2,'0');
+    // noRepublic 參數保留供申請日期不顯示「中華民國」用
+    // 新格式統一用 YYY.MM.DD，忽略 noRepublic 差異
+    let base = roc + '.' + mm + '.' + dd;
     if(withWeekday){
       const wd = ['日','一','二','三','四','五','六'][new Date(v).getDay()];
-      base += '（星期' + wd + '）';
+      base += '(' + wd + ')';
     }
     return base;
   }
@@ -436,30 +690,55 @@
     return ['日','一','二','三','四','五','六'][new Date(v).getDay()];
   }
 
-  // 活動日期：單日或區間（每段日期用 span.d 包住，單日內不斷行）
-  function fmtDateRange(start, end){
-    if(!start) return '　年　月　日';
-    const s = start.split('-').map(Number);
-    const sRoc = s[0]-1911, sM = s[1], sD = s[2];
-    const sWd = weekday(start);
-
-    // 無結束日 → 單日
-    if(!end || end === start){
-      return '<span class="d">' + sRoc + ' 年 ' + sM + ' 月 ' + sD + ' 日（星期' + sWd + '）</span>';
-    }
-
-    const e = end.split('-').map(Number);
-    const eRoc = e[0]-1911, eM = e[1], eD = e[2];
-    const eWd = weekday(end);
-
-    return '<span class="d">' + sRoc + ' 年 ' + sM + ' 月 ' + sD + ' 日（星期' + sWd + '）</span> <span class="d">～ ' + eRoc + ' 年 ' + eM + ' 月 ' + eD + ' 日（星期' + eWd + '）</span>';
+  // 活動日期格式：YYY.MM.DD(X)（含星期，活動通知用）
+  function fmtSingleDate(v){
+    if(!v) return '';
+    const parts = v.split('-').map(Number);
+    const roc = parts[0]-1911;
+    const mm = String(parts[1]).padStart(2,'0');
+    const dd = String(parts[2]).padStart(2,'0');
+    return roc + '.' + mm + '.' + dd + '(' + weekday(v) + ')';
   }
 
-  function getNatureValue(){
+  // 活動日期格式：YYY.MM.DD（不含星期，展業說明書用）
+  function fmtSingleDateNoWd(v){
+    if(!v) return '';
+    const parts = v.split('-').map(Number);
+    const roc = parts[0]-1911;
+    const mm = String(parts[1]).padStart(2,'0');
+    const dd = String(parts[2]).padStart(2,'0');
+    return roc + '.' + mm + '.' + dd;
+  }
+
+  // 活動日期：單日或區間（活動通知，含星期，全形～）
+  function fmtDateRange(start, end){
+    if(!start) return '　.　.　';
+    const s = fmtSingleDate(start);
+    if(!end || end === start) return '<span class="d">' + s + '</span>';
+    const e = fmtSingleDate(end);
+    return '<span class="d">' + s + '</span><span class="d">～' + e + '</span>';
+  }
+
+  // 活動日期：展業說明書版（不含星期，半形~）
+  function fmtDateRangeStatement(start, end){
+    if(!start) return '　.　.　';
+    const s = fmtSingleDateNoWd(start);
+    if(!end || end === start) return s;
+    const e = fmtSingleDateNoWd(end);
+    return s + '~' + e;
+  }
+
+  // 活動性質（單選）→ 為相容展業渲染，仍以陣列回傳（最多一項）
+  function getNatureValues(){
     const sel = document.querySelector('input[name=nature]:checked');
-    if(!sel) return '';
-    if(sel.value === '__other__') return document.getElementById('natureOther').value || '其他';
-    return sel.value;
+    if(!sel) return [];
+    if(sel.value === '__other__') return [document.getElementById('natureOther').value || '其他'];
+    return [sel.value];
+  }
+  // 通知標題取性質
+  function getNatureFirst(){
+    const arr = getNatureValues();
+    return arr.length ? arr[0] : '';
   }
   function getTargetValue(){
     const sel = document.getElementById('targetSelect').value;
@@ -482,10 +761,35 @@
     if(isOther) document.getElementById('placeOther').focus();
   }
 
+  // AML 明細展開
+  function toggleAml(){
+    const sel = document.querySelector('input[name=aml]:checked');
+    document.getElementById('amlDetail').style.display = (sel && sel.value === 'stores') ? 'block' : 'none';
+  }
+
+  // 費用明細（可增列）
+  let costRows = [{item:'', desc:''}];
+  function renderCostInputs(){
+    const box = document.getElementById('costList');
+    box.innerHTML = '';
+    costRows.forEach(function(r, i){
+      const div = document.createElement('div');
+      div.className = 'cost-row';
+      div.innerHTML =
+        '<input class="ci-item" type="text" placeholder="費用項目" value="' + esc(r.item) + '" oninput="updCost(' + i + ',\'item\',this.value)">' +
+        '<input class="ci-desc" type="text" placeholder="請輸入數字金額" value="' + esc(r.desc) + '" oninput="updCost(' + i + ',\'desc\',this.value)">' +
+        '<button type="button" class="ci-del" onclick="delCostRow(' + i + ')" title="刪除">×</button>';
+      box.appendChild(div);
+    });
+  }
+  function updCost(i, k, v){ costRows[i][k] = v; render(); }
+  function addCostRow(){ costRows.push({item:'', desc:''}); renderCostInputs(); render(); }
+  function delCostRow(i){ costRows.splice(i,1); if(!costRows.length) costRows=[{item:'',desc:''}]; renderCostInputs(); render(); }
+
   function render(){
     const g = function(id){ return document.getElementById(id).value; };
     const org = getOrgValue();
-    const nature = getNatureValue();
+    const nature = getNatureFirst();
     const actName = g('actName');
     const startVal = g('actDate'), endVal = g('actDateEnd');
     const warn = document.getElementById('dateWarn');
@@ -498,7 +802,7 @@
     const actDate = fmtDateRange(startVal, endVal);
     const place = getPlaceValue();
     const host = g('host');
-    const manager = g('manager');
+    const manager = '';
     const contentLines = g('content').split('\n').map(function(s){return s.trim();}).filter(Boolean);
 
     let contentHtml = '';
@@ -539,6 +843,173 @@
     fitContent();
     equalizeRows();
     requestAnimationFrame(function(){ requestAnimationFrame(scaleDoc); });
+
+    renderStatement();
+  }
+
+  // ===== 展業活動說明書渲染 =====
+  function renderStatement(){
+    const g = function(id){ const el = document.getElementById(id); return el ? el.value : ''; };
+    const org = getOrgValue();
+    const applyDate = fmtDate(g('applyDate'), false, true);
+    const natures = getNatureValues();
+    const natureOpts = ['業績獎勵','活動','會議','訓練','康樂活動'];
+    const actName = g('actName');
+    const actDate = fmtDateRangeStatement(g('actDate'), g('actDateEnd'));
+    const place = getPlaceValue();
+    const target = getTargetValue();
+    const host = g('host');
+    const purpose = g('purpose'); // 活動目的說明（專屬欄位）
+    const remark = g('remark');
+    const manager = '';
+    const assistant = '';
+    const regionMgr = '';
+    const regionStaff = '';
+
+    // 性質複選勾選呈現
+    function natureBox(){
+      let html = '';
+      natureOpts.forEach(function(o){
+        const on = natures.indexOf(o) >= 0;
+        html += '<span class="sck">' + (on?'■':'□') + o + '</span> ';
+      });
+      // 其他
+      const otherVal = (function(){
+        const oc = document.querySelector('input[name=nature][value=__other__]');
+        return (oc && oc.checked) ? (document.getElementById('natureOther').value||'其他') : '';
+      })();
+      const otherOn = !!otherVal;
+      html += '<span class="sck">' + (otherOn?'■':'□') + '其他' + (otherOn?'：'+esc(otherVal):'') + '</span>';
+      return html;
+    }
+
+    // 安全評估表
+    const safetySel = document.querySelector('input[name=safety]:checked');
+    const safetyIsYes = safetySel && safetySel.value === '是';
+    const safetyDate = g('safetyDate');
+    const safetyBox = '<span class="sck">' + (!safetyIsYes?'■':'□') + '否</span> ' +
+      '<span class="sck">' + (safetyIsYes?'■':'□') + '是，提出日期：' + (safetyIsYes&&safetyDate?fmtSingleDate(safetyDate):'＿＿＿') + '</span>';
+
+    // AML — 全部項目固定顯示，勾選的用 ■
+    const amlSel = document.querySelector('input[name=aml]:checked');
+    const amlIsStores = amlSel && amlSel.value === 'stores';
+    const aT = esc(g('amlTotal'))||'＿＿';
+    const aA = esc(g('amlA'))||'＿＿';
+    const aB = esc(g('amlB'))||'＿＿';
+    const aBN = esc(g('amlBName'))||'';
+    const aC = esc(g('amlC'))||'＿＿';
+    let amlHtml = '';
+    amlHtml += '<div class="sck-line">' + (!amlIsStores?'■':'□') + '本次無須查詢(例：競賽激勵獎金)。</div>';
+    amlHtml += '<div class="sck-line">' + (amlIsStores?'■':'□') + '本次交易店家共計 ' + (amlIsStores?aT:'＿＿') + ' 家，分別說明如下：</div>';
+    amlHtml += '<div class="sck-sub">(1)已有明確交易店家，提供「店家資訊審查表」，計 ' + (amlIsStores?aA:'＿＿') + ' 家。</div>';
+    amlHtml += '<div class="sck-sub">(2)已有明確交易店家，1萬元以下且交易條件標準化，計 ' + (amlIsStores?aB:'＿＿') + ' 家。</div>';
+    amlHtml += '<div class="sck-sub">　店家名稱：' + (amlIsStores&&aBN?aBN:'') + '</div>';
+    amlHtml += '<div class="sck-sub">(3)尚未確認店家，預計 ' + (amlIsStores?aC:'＿＿') + ' 家，將於交易前進行查詢。</div>';
+
+    // 參與率
+    const rateSel = document.querySelector('input[name=rate]:checked');
+    const rateIsYes = rateSel && rateSel.value !== '否';
+    const rateBox = '<span class="sck">' + (!rateIsYes?'■':'□') + '否</span>　　' +
+      '<span class="sck">' + (rateIsYes?'■':'□') + '是(參加名單)</span>';
+
+    // 費用明細大格：先放「內容」輸入欄文字，換行後放費用項目明細
+    const contentText = g('content');
+    let costInnerHtml = '';
+    if(contentText){
+      costInnerHtml += '<div class="cost-desc-block">' + esc(contentText).replace(/\n/g,'<br>') + '</div>';
+    }
+    const validCosts = costRows.filter(function(r){ return r.item || r.desc; });
+    if(validCosts.length){
+      if(contentText) costInnerHtml += '<div class="cost-divider"></div>';
+      costInnerHtml += validCosts.map(function(r){
+        return '<div class="cost-inner-row">' +
+          (r.item ? '<span class="cost-inner-item">' + esc(r.item) + '：</span>' : '') +
+          (r.desc ? esc(r.desc) : '') +
+          '</div>';
+      }).join('');
+    }
+    // 費用區：費用項目 rowspan=2，右側上：內容說明表頭，下：大空白格
+    const costRowsHtml =
+      '<tr>' +
+        '<td rowspan="3" class="s-cost-label-cell">費用項目</td>' +
+        '<th colspan="3" class="s-cost-head-desc">內容說明</th>' +
+      '</tr>' +
+      '<tr>' +
+        '<td colspan="3" class="s-cost-block">' + costInnerHtml + '</td>' +
+      '</tr>' +
+      '<tr class="s-total-row">' +
+        '<td class="s-total-mid">本次活動費用</td>' +
+        '<td colspan="2" class="s-total-val">' + costTotal() + '</td>' +
+      '</tr>';
+
+    const sb = [];
+    sb.push('<div class="s-title">展業活動說明書</div>');
+    sb.push('<table class="s-form">');
+    sb.push('<colgroup><col style="width:22%"><col style="width:30%"><col style="width:18%"><col style="width:30%"></colgroup>');
+    // 通訊處 / 申請日期
+    sb.push('<tr><th class="s-th-long">通訊處名稱/代號</th><td>' + (esc(org)||'&nbsp;') + '</td><th>申請日期</th><td>' + (applyDate||'&nbsp;') + '</td></tr>');
+    // 活動性質（可複選）
+    sb.push('<tr><th class="s-th-long">活動性質(可複選)</th><td colspan="3" class="s-checks">' + natureBox() + '</td></tr>');
+    // 提出活動安全評估表（標籤跨兩欄，選項跨兩欄，對照 PDF）
+    sb.push('<tr><th colspan="2" style="text-align:center;">提出「活動安全評估表」</th><td colspan="2" class="s-checks">' + safetyBox + '</td></tr>');
+    // 利關人及 AML 查詢（標題垂直置中，兩行）
+    sb.push('<tr><th class="s-aml-th">利關人及 AML<br>查詢</th><td colspan="3" class="s-aml">' + amlHtml + '</td></tr>');
+    // 活動地點 / 活動對象
+    sb.push('<tr><th>活動地點</th><td>' + (esc(place)||'&nbsp;') + '</td><th>活動對象</th><td>' + (esc(target)||'&nbsp;') + '</td></tr>');
+    // 活動名稱
+    sb.push('<tr><th>活動名稱</th><td colspan="3">' + (esc(actName)||'&nbsp;') + '</td></tr>');
+    // 活動日期 / 主辦人
+    sb.push('<tr><th>活動日期</th><td class="date-cell">' + actDate + '</td><th>主辦人</th><td>' + (esc(host)||'&nbsp;') + '</td></tr>');
+    // 活動目的說明
+    sb.push('<tr><th>活動目的說明</th><td colspan="3" class="s-purpose">' + (purpose?esc(purpose).replace(/\n/g,'<br>'):'&nbsp;') + '</td></tr>');
+    // 計入活動參與率
+    sb.push('<tr><th>計入活動參與率</th><td colspan="3" class="s-checks">' + rateBox + '</td></tr>');
+    // 費用項目 / 內容說明 / 本次活動費用（費用項目縱跨三列）
+    sb.push(costRowsHtml);
+    // 備註
+    sb.push('<tr><th>備註</th><td colspan="3" class="s-remark">' + (remark?esc(remark).replace(/\n/g,'<br>'):'&nbsp;') + '</td></tr>');
+    sb.push('</table>');
+    // 三段註記
+    sb.push('<div class="s-notes">');
+    sb.push('<div>註 1：報支費用時，須同時檢附已簽准之展業活動說明書。</div>');
+    sb.push('<div>註 2：若通訊處主管同時擔任區部主管職務者，該通訊處之「展業活動說明書」應送交營管審核。</div>');
+    sb.push('<div>註 3：舉辦相關展業活動，若有明確交易店家且非屬 1 萬元以下交易條件標準化者，請同時填寫「店家資料審查表」，以利後續查詢利關人及 AML 資訊，並於呈核時檢附完成之「店家資料審查表」。</div>');
+    sb.push('</div>');
+    // 簽核
+    sb.push('<div class="s-sign">');
+    sb.push('<div class="s-sign-row"><span class="s-sign-item">通訊處主管：<span class="s-sign-blank"></span></span><span class="s-sign-item">業務助理：<span class="s-sign-blank"></span></span></div>');
+    sb.push('<div class="s-sign-row"><span class="s-sign-item">區部主管：<span class="s-sign-blank"></span></span><span class="s-sign-item">區部承辦人：<span class="s-sign-blank"></span></span></div>');
+    sb.push('</div>');
+    // 版次（簽核下方置右）
+    sb.push('<div class="s-version">2024.06版</div>');
+
+    document.getElementById('docS').innerHTML = sb.join('');
+  }
+
+  // 費用加總（純數字才加總，否則顯示原文串接）
+  function costTotal(){
+    let sum = 0, hasNum = false, texts = [];
+    costRows.forEach(function(r){
+      if(!r.desc) return;
+      const n = parseFloat(String(r.desc).replace(/[^0-9.]/g,''));
+      if(!isNaN(n) && /[0-9]/.test(r.desc)){ sum += n; hasNum = true; }
+      texts.push(r.desc);
+    });
+    if(hasNum) return 'NT$ ' + sum.toLocaleString();
+    return texts.length ? esc(texts.join('、')) : '&nbsp;';
+  }
+
+  // 分頁切換
+  function switchTab(which){
+    const isNotice = which === 'notice';
+    document.getElementById('wrap-notice').style.display = isNotice ? 'flex' : 'none';
+    document.getElementById('wrap-statement').style.display = isNotice ? 'none' : 'flex';
+    document.getElementById('tab-notice').classList.toggle('active', isNotice);
+    document.getElementById('tab-statement').classList.toggle('active', !isNotice);
+    // 切換列印按鈕文字
+    const btn = document.querySelector('.btn-print');
+    if(btn) btn.innerHTML = '🖨 列印 / 另存【' + (isNotice ? '通知' : '展業說明書') + '】';
+    if(isNotice){ requestAnimationFrame(function(){ requestAnimationFrame(scaleDoc); }); }
   }
 
   // 量測活動名稱列與活動對象列的實際高度，取較高者套到另一列，確保等高
@@ -607,9 +1078,36 @@
     const t = new Date();
     const today = t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
     document.getElementById('actDate').value = today;
+    document.getElementById('applyDate').value = today;
     loadOrg();
+    renderCostInputs();
+    toggleAml();
     render();
     window.addEventListener('resize', scaleDoc);
+
+    // 列印前：縮放展業說明書進 A4 單頁
+    window.addEventListener('beforeprint', function(){
+      const docS = document.getElementById('docS');
+      if(!docS) return;
+      // 還原任何先前的 scale 再量
+      docS.style.transform = '';
+      docS.style.height = '';
+      const realH = docS.scrollHeight;
+      const a4px = 297 / 25.4 * 96; // 297mm in px @96dpi
+      if(realH > a4px){
+        const scale = a4px / realH;
+        docS.style.transform = 'scale(' + scale + ')';
+        docS.style.transformOrigin = 'top left';
+        docS.style.width = (100 / scale) + '%';
+      }
+    });
+    window.addEventListener('afterprint', function(){
+      const docS = document.getElementById('docS');
+      if(!docS) return;
+      docS.style.transform = '';
+      docS.style.transformOrigin = '';
+      docS.style.width = '';
+    });
   })();
 </script>
 </body>
