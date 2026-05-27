@@ -329,6 +329,7 @@
     <input type="date" id="actDate" oninput="render()">
     <label>活動結束日期（選填，填了即顯示為區間）</label>
     <input type="date" id="actDateEnd" oninput="render()">
+    <div id="dateWarn" style="display:none;color:#e07070;font-size:13px;margin-top:6px;">⚠ 結束日期不可早於起始日期</div>
     <label>活動地點</label>
     <input type="text" id="place" value="" placeholder="如：台北君悅酒店 3 樓宴會廳" oninput="render()">
     <label>主辦人</label>
@@ -489,7 +490,15 @@
     const nature = getNatureValue();
     const applyDate = fmtDate(g('applyDate'), false, true);
     const actName = g('actName');
-    const actDate = fmtDateRange(g('actDate'), g('actDateEnd'));
+    const startVal = g('actDate'), endVal = g('actDateEnd');
+    const warn = document.getElementById('dateWarn');
+    if(endVal && startVal && endVal < startVal){
+      warn.style.display = 'block';
+      return;
+    } else {
+      warn.style.display = 'none';
+    }
+    const actDate = fmtDateRange(startVal, endVal);
     const place = g('place');
     const host = g('host');
     const applicant = g('applicant');
