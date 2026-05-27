@@ -291,7 +291,7 @@
 <body>
 
 <aside class="panel">
-  <h1>活動申請公文</h1>
+  <h1>活動申請通知</h1>
   <div class="sub">套版列印工具</div>
 
   <div class="group">
@@ -303,8 +303,6 @@
       <option value="__other__">其他</option>
     </select>
     <input type="text" id="orgOther" placeholder="請輸入通訊處名稱／代號" oninput="saveOrg();render()" style="display:none;margin-top:8px;">
-    <label>申請日期</label>
-    <input type="date" id="applyDate" oninput="render()">
   </div>
 
   <div class="group">
@@ -331,21 +329,24 @@
     <input type="date" id="actDateEnd" oninput="render()">
     <div id="dateWarn" style="display:none;color:#e07070;font-size:13px;margin-top:6px;">⚠ 結束日期不可早於起始日期</div>
     <label>活動地點</label>
-    <input type="text" id="place" value="" placeholder="如：台北君悅酒店 3 樓宴會廳" oninput="render()">
+    <select id="placeSelect" onchange="togglePlaceOther();render()">
+      <option value="單位職場">單位職場</option>
+      <option value="__other__">其他</option>
+    </select>
+    <input type="text" id="placeOther" placeholder="請輸入地點" oninput="render()" style="display:none;margin-top:8px;">
     <label>主辦人</label>
     <input type="text" id="host" value="" placeholder="如：Kevin" oninput="render()">
   </div>
 
   <div class="group">
-    <div class="group-title">活動對象（單選）</div>
-    <div class="radio-set" id="targetSet">
-      <label class="opt"><input type="radio" name="target" value="單位同仁（踴躍參與）" checked onchange="render()">單位同仁（踴躍參與）</label>
-      <label class="opt"><input type="radio" name="target" value="單位同仁及來賓（踴躍參與）" onchange="render()">單位同仁及來賓（踴躍參與）</label>
-      <div class="radio-other">
-        <label class="opt" style="margin:0;"><input type="radio" name="target" value="__other__" onchange="render()">其他</label>
-        <input type="text" id="targetOther" placeholder="請輸入" oninput="document.querySelector('input[name=target][value=__other__]').checked=true;render()">
-      </div>
-    </div>
+    <div class="group-title">活動對象</div>
+    <select id="targetSelect" onchange="toggleTargetOther();render()">
+      <option value="單位同仁">單位同仁</option>
+      <option value="單位同仁（踴躍參加）">單位同仁（踴躍參加）</option>
+      <option value="單位同仁及來賓（踴躍參加）">單位同仁及來賓（踴躍參加）</option>
+      <option value="__other__">其他</option>
+    </select>
+    <input type="text" id="targetOther" placeholder="請輸入" oninput="render()" style="display:none;margin-top:8px;">
   </div>
 
   <div class="group">
@@ -369,7 +370,7 @@
   </div>
 
   <div class="actions">
-    <button class="btn btn-print" onclick="window.print()">🖨 列印 / 另存【公文】</button>
+    <button class="btn btn-print" onclick="window.print()">🖨 列印 / 另存【通知】</button>
     <div class="hint">列印時表單會自動隱藏，只輸出 A4 公文。<br>在列印對話框選「另存為 PDF」即可存檔。</div>
   </div>
 </aside>
@@ -461,34 +462,30 @@
     return sel.value;
   }
   function getTargetValue(){
-    const sel = document.querySelector('input[name=target]:checked');
-    if(!sel) return '';
-    if(sel.value === '__other__') return document.getElementById('targetOther').value || '其他';
-    return sel.value;
+    const sel = document.getElementById('targetSelect').value;
+    if(sel === '__other__') return document.getElementById('targetOther').value || '其他';
+    return sel;
   }
-
-  function targetChecks(){
-    const opts = ['單位同仁（踴躍參與）','單位同仁及來賓（踴躍參與）'];
-    const sel = document.querySelector('input[name=target]:checked');
-    const selVal = sel ? sel.value : '';
-    const otherTxt = document.getElementById('targetOther').value;
-    let html = '<div class="checks">';
-    opts.forEach(function(o){
-      const on = (selVal === o);
-      html += '<span class="ck ' + (on?'checked':'') + '"><span class="box">' + (on?'■':'□') + '</span>' + o + '</span>';
-    });
-    const otherOn = (selVal === '__other__');
-    const otherFill = (otherOn && otherTxt) ? esc(otherTxt) : '＿＿＿＿＿＿';
-    html += '<span class="ck ' + (otherOn?'checked':'') + '"><span class="box">' + (otherOn?'■':'□') + '</span>其他：' + otherFill + '</span>';
-    html += '</div>';
-    return html;
+  function toggleTargetOther(){
+    const isOther = document.getElementById('targetSelect').value === '__other__';
+    document.getElementById('targetOther').style.display = isOther ? 'block' : 'none';
+    if(isOther) document.getElementById('targetOther').focus();
+  }
+  function getPlaceValue(){
+    const sel = document.getElementById('placeSelect').value;
+    if(sel === '__other__') return document.getElementById('placeOther').value || '';
+    return sel;
+  }
+  function togglePlaceOther(){
+    const isOther = document.getElementById('placeSelect').value === '__other__';
+    document.getElementById('placeOther').style.display = isOther ? 'block' : 'none';
+    if(isOther) document.getElementById('placeOther').focus();
   }
 
   function render(){
     const g = function(id){ return document.getElementById(id).value; };
     const org = getOrgValue();
     const nature = getNatureValue();
-    const applyDate = fmtDate(g('applyDate'), false, true);
     const actName = g('actName');
     const startVal = g('actDate'), endVal = g('actDateEnd');
     const warn = document.getElementById('dateWarn');
@@ -499,7 +496,7 @@
       warn.style.display = 'none';
     }
     const actDate = fmtDateRange(startVal, endVal);
-    const place = g('place');
+    const place = getPlaceValue();
     const host = g('host');
     const applicant = g('applicant');
     const manager = g('manager');
@@ -512,13 +509,12 @@
       contentHtml = '&nbsp;';
     }
 
-    const title = '單位' + (esc(nature)||'　　') + '公文';
+    const title = '單位' + (esc(nature)||'　　') + '通知';
 
     document.getElementById('doc').innerHTML =
       '<div class="head">' +
         '<div class="org">' + (esc(org)||'　') + '</div>' +
         '<div class="title">' + title + '</div>' +
-        '<div class="apply-date">申請日期：' + applyDate + '</div>' +
       '</div>' +
       '<hr class="rule">' +
       '<table class="form">' +
@@ -527,7 +523,7 @@
           '<th class="th-cell">活動名稱</th><td colspan="3">' + (esc(actName)||'&nbsp;') + '</td>' +
         '</tr>' +
         '<tr class="equal-row" id="row-target">' +
-          '<th class="th-cell">活動對象</th><td colspan="3">' + targetChecks() + '</td>' +
+          '<th class="th-cell">活動對象</th><td colspan="3">' + (esc(getTargetValue())||'&nbsp;') + '</td>' +
         '</tr>' +
         '<tr>' +
           '<th class="th-cell">活動日期</th><td class="date-cell">' + actDate + '</td>' +
@@ -611,7 +607,6 @@
   (function init(){
     const t = new Date();
     const today = t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
-    document.getElementById('applyDate').value = today;
     document.getElementById('actDate').value = today;
     loadOrg();
     render();
