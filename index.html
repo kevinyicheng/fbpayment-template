@@ -210,9 +210,6 @@
     line-height:2;
     font-size:var(--content-fs, 12pt);
   }
-  table.form td.content-cell .content-inner ol{
-    font-size:inherit;
-  }
 
   .checks{display:flex;flex-wrap:wrap;gap:6px 22px;}
   .checks .ck{white-space:nowrap;}
@@ -474,8 +471,7 @@
 
     let contentHtml = '';
     if(contentLines.length){
-      contentHtml = '<ol style="margin:0;padding-left:1.4em;line-height:2;">' +
-        contentLines.map(function(l){return '<li>' + esc(l) + '</li>';}).join('') + '</ol>';
+      contentHtml = contentLines.map(function(l){return esc(l);}).join('<br>');
     } else {
       contentHtml = '&nbsp;';
     }
