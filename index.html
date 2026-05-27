@@ -257,6 +257,19 @@
     margin-left:4px;
   }
 
+  @media (max-width:1199px){
+    body{flex-direction:column;}
+    .panel{
+      width:100%;min-width:0;
+      height:auto;position:static;
+      padding:24px 20px 32px;
+    }
+    .stage{
+      height:auto;padding:24px 16px 48px;
+      overflow:visible;align-items:flex-start;
+    }
+  }
+
   @media print{
     @page{size:A4;margin:0;}
     body{background:#fff;display:block;}
@@ -269,6 +282,8 @@
       margin:0;
       overflow:hidden;
       page-break-after:avoid;
+      transform:none !important;
+      margin-bottom:0 !important;
     }
   }
 </style>
@@ -519,6 +534,7 @@
 
     fitContent();
     equalizeRows();
+    requestAnimationFrame(function(){ requestAnimationFrame(scaleDoc); });
   }
 
   // 量測活動名稱列與活動對象列的實際高度，取較高者套到另一列，確保等高
@@ -566,6 +582,23 @@
     });
   }
 
+  function scaleDoc(){
+    var doc = document.getElementById('doc');
+    var stage = document.querySelector('.stage');
+    if(!doc || !stage) return;
+    doc.style.transform = '';
+    doc.style.marginBottom = '';
+    var avail = stage.clientWidth - 32;
+    var natW = doc.offsetWidth;
+    var natH = doc.offsetHeight;
+    if(natW > 0 && avail < natW){
+      var s = avail / natW;
+      doc.style.transform = 'scale(' + s + ')';
+      doc.style.transformOrigin = 'top center';
+      doc.style.marginBottom = '-' + Math.round(natH * (1 - s)) + 'px';
+    }
+  }
+
   (function init(){
     const t = new Date();
     const today = t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0');
@@ -573,6 +606,7 @@
     document.getElementById('actDate').value = today;
     loadOrg();
     render();
+    window.addEventListener('resize', scaleDoc);
   })();
 </script>
 </body>
