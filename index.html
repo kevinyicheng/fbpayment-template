@@ -309,7 +309,8 @@
     <div class="group-title">活動性質（單選．帶入標題）</div>
     <div class="radio-set" id="natureSet">
       <label class="opt"><input type="radio" name="nature" value="業績獎勵" onchange="render()">業績獎勵</label>
-      <label class="opt"><input type="radio" name="nature" value="活動會議" onchange="render()">活動會議</label>
+      <label class="opt"><input type="radio" name="nature" value="活動" onchange="render()">活動</label>
+      <label class="opt"><input type="radio" name="nature" value="會議" onchange="render()">會議</label>
       <label class="opt"><input type="radio" name="nature" value="訓練" onchange="render()">訓練</label>
       <label class="opt"><input type="radio" name="nature" value="康樂活動" checked onchange="render()">康樂活動</label>
       <div class="radio-other">
@@ -320,22 +321,8 @@
   </div>
 
   <div class="group">
-    <div class="group-title">活動資訊</div>
-    <label>活動名稱</label>
+    <div class="group-title">活動名稱</div>
     <input type="text" id="actName" value="" placeholder="如：第二季團隊聚餐暨表揚大會" oninput="render()">
-    <label>活動日期（起）</label>
-    <input type="date" id="actDate" oninput="render()">
-    <label>活動結束日期（選填，填了即顯示為區間）</label>
-    <input type="date" id="actDateEnd" oninput="render()">
-    <div id="dateWarn" style="display:none;color:#e07070;font-size:13px;margin-top:6px;">⚠ 結束日期不可早於起始日期</div>
-    <label>活動地點</label>
-    <select id="placeSelect" onchange="togglePlaceOther();render()">
-      <option value="單位職場">單位職場</option>
-      <option value="__other__">其他</option>
-    </select>
-    <input type="text" id="placeOther" placeholder="請輸入地點" oninput="render()" style="display:none;margin-top:8px;">
-    <label>主辦人</label>
-    <input type="text" id="host" value="" placeholder="如：Kevin" oninput="render()">
   </div>
 
   <div class="group">
@@ -350,8 +337,36 @@
   </div>
 
   <div class="group">
+    <div class="group-title">活動日期</div>
+    <label>起始日期</label>
+    <input type="date" id="actDate" oninput="render()">
+    <label>結束日期（選填，填了即顯示為區間）</label>
+    <input type="date" id="actDateEnd" oninput="render()">
+    <div id="dateWarn" style="display:none;color:#e07070;font-size:13px;margin-top:6px;">⚠ 結束日期不可早於起始日期</div>
+  </div>
+
+  <div class="group">
+    <div class="group-title">活動地點</div>
+    <select id="placeSelect" onchange="togglePlaceOther();render()">
+      <option value="單位職場">單位職場</option>
+      <option value="__other__">其他</option>
+    </select>
+    <input type="text" id="placeOther" placeholder="請輸入地點" oninput="render()" style="display:none;margin-top:8px;">
+  </div>
+
+  <div class="group">
     <div class="group-title">內容</div>
     <textarea id="content" rows="6" oninput="render()"></textarea>
+  </div>
+
+  <div class="group">
+    <div class="group-title">主辦人</div>
+    <input type="text" id="host" value="" placeholder="如：Kevin" oninput="render()">
+  </div>
+
+  <div class="group">
+    <div class="group-title">單位主管</div>
+    <input type="text" id="manager" value="" placeholder="單位主管簽名" oninput="render()">
   </div>
 
   <div class="group">
@@ -359,14 +374,6 @@
     <label>本次活動費用</label>
     <input type="text" id="cost" value="" placeholder="如：NT$ 50,000" oninput="render()">
     <div class="note-future">此欄位的資料會保留，供後續另一份報表使用，目前公文版面不顯示。</div>
-  </div>
-
-  <div class="group">
-    <div class="group-title">簽核欄位</div>
-    <label>申請人</label>
-    <input type="text" id="applicant" value="" placeholder="申請人簽名" oninput="render()">
-    <label>單位主管</label>
-    <input type="text" id="manager" value="" placeholder="單位主管簽名" oninput="render()">
   </div>
 
   <div class="actions">
