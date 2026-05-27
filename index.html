@@ -85,6 +85,10 @@
     outline:none;
     border-color:var(--accent);
   }
+  input[type=date]::-webkit-calendar-picker-indicator{
+    filter:invert(1);
+    cursor:pointer;
+  }
   textarea{resize:vertical;line-height:1.7;}
 
   .radio-set{display:flex;flex-direction:column;gap:6px;}
